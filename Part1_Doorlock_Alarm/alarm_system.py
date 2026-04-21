@@ -30,6 +30,9 @@ class AlarmSystem:
 
     def toggle_unlock(self, lcd):
         self._failed_attempts = 0
+        if self._alarm_active:
+            self._alarm_active = False
+            GPIO.output(self._pin, GPIO.LOW)
         if self._unlocked:
             self._unlocked = False
             if self._servo:
