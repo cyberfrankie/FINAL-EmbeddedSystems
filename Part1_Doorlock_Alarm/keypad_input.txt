@@ -30,7 +30,9 @@ void loop() {
       inputCode = "";
       Serial.println("CLEARED");
     } else if (key == '#') {
-      if (inputCode == CORRECT_CODE) {
+      if (inputCode == "") {
+        Serial.println("REARM");
+      } else if (inputCode == CORRECT_CODE) {
         Serial.println("CORRECT");
       } else {
         Serial.println("INCORRECT");

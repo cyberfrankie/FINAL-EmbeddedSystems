@@ -28,23 +28,23 @@ class AlarmSystem:
         else:
             lcd.show_denied()
 
-    def toggle_unlock(self, lcd):
+    def disarm(self, lcd):
         self._failed_attempts = 0
         if self._alarm_active:
             self._alarm_active = False
             GPIO.output(self._pin, GPIO.LOW)
-        if self._unlocked:
-            self._unlocked = False
-            if self._servo:
-                self._servo.lock()
-            lcd.show_armed()
-            print("System re-armed.")
-        else:
-            self._unlocked = True
-            if self._servo:
-                self._servo.unlock()
-            lcd.show_unlocked()
-            print("System disarmed/unlocked.")
+        self._unlocked = True
+        if self._servo:
+            self._servo.unlock()
+        lcd.show_unlocked()
+        print("System disarmed/unlocked.")
+
+    def rearm(self, lcd):
+        self._unlocked = False
+        if self._servo:
+            self._servo.lock()
+        lcd.show_armed()
+        print("System re-armed.")
 
     def door_pressed(self, lcd):
         if self._alarm_active:

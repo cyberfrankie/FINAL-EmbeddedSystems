@@ -17,44 +17,43 @@ class LCDDisplay:
             backlight_enabled=True
         )
         self._input_length = 0
+        self._status = "Armed"
         self.reset()
 
     def reset(self):
         self._input_length = 0
-        self.lcd.clear()
         self.lcd.cursor_pos = (0, 0)
-        self.lcd.write_string("Enter Code:")
+        self.lcd.write_string(" " * 16)
+        self.lcd.cursor_pos = (1, 0)
+        self.lcd.write_string(self._status.ljust(16))
 
     def key_pressed(self):
         if self._input_length < 16:
             self._input_length += 1
-        self.lcd.cursor_pos = (1, 0)
-        self.lcd.write_string("*" * self._input_length)
-
-    def show_granted(self):
-        self.lcd.clear()
         self.lcd.cursor_pos = (0, 0)
-        self.lcd.write_string("Access Granted!")
-        self._reset_after(2)
+        self.lcd.write_string(("*" * self._input_length).ljust(16))
 
     def show_denied(self):
-        self.lcd.clear()
+        self._input_length = 0
         self.lcd.cursor_pos = (0, 0)
-        self.lcd.write_string("Wrong Code!")
+        self.lcd.write_string("Wrong Code!     ")
         self._reset_after(2)
 
     def show_unlocked(self):
-        self.lcd.clear()
+        self._input_length = 0
+        self._status = "Disarmed"
         self.lcd.cursor_pos = (0, 0)
-        self.lcd.write_string("System Unlocked")
+        self.lcd.write_string(" " * 16)
         self.lcd.cursor_pos = (1, 0)
-        self.lcd.write_string("Alarm Disabled")
+        self.lcd.write_string("Disarmed        ")
 
     def show_armed(self):
-        self.lcd.clear()
+        self._input_length = 0
+        self._status = "Armed"
         self.lcd.cursor_pos = (0, 0)
-        self.lcd.write_string("System Armed")
-        self._reset_after(2)
+        self.lcd.write_string(" " * 16)
+        self.lcd.cursor_pos = (1, 0)
+        self.lcd.write_string("Armed           ")
 
     def show_alarm(self):
         self.lcd.clear()
@@ -65,7 +64,7 @@ class LCDDisplay:
 
     def clear_input(self):
         self._input_length = 0
-        self.lcd.cursor_pos = (1, 0)
+        self.lcd.cursor_pos = (0, 0)
         self.lcd.write_string(" " * 16)
 
     def _reset_after(self, seconds):

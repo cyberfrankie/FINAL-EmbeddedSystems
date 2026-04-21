@@ -19,8 +19,11 @@ class KeypadReceiver:
                 if line == "KEY":
                     self._lcd.key_pressed()
                 elif line == "CORRECT":
-                    print("Correct code - toggling lock state.")
-                    self._alarm.toggle_unlock(self._lcd)
+                    print("Correct code - disarming.")
+                    self._alarm.disarm(self._lcd)
+                elif line == "REARM":
+                    print("Rearming system.")
+                    self._alarm.rearm(self._lcd)
                 elif line == "INCORRECT":
                     print("Access denied!")
                     self._alarm.failed_attempt(self._lcd)
