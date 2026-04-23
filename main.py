@@ -11,7 +11,7 @@ from alarm_system import AlarmSystem
 from push_button import PushButton
 from keypad_receiver import KeypadReceiver
 from servo_lock import ServoLock
-from led_control import RGBLed
+from led_control import RGBLed, WhiteLed
 from infrared_sensor import InfraredSensor
 
 # GPIO mode set once here so all modules share the same context
@@ -24,21 +24,25 @@ BUZZER_PIN   = 23               # BCM pin for buzzer
 BUTTON_PIN   = 18               # BCM pin for push button (doorknob)
 SERVO_PIN    = 17               # BCM pin for servo signal wire
 
-# RGB LED pins (common-cathode: longest pin to GND)
+# RGB LED pins (common-anode: longest pin to 3.3V)
 LED_RED_PIN   = 13
 LED_GREEN_PIN = 19
 LED_BLUE_PIN  = 26
 
+# White LED pin (motion sensor indicator)
+WHITE_LED_PIN = 6
+
 # HW-416 IR sensor digital output pin
 IR_PIN = 16
 
-led      = RGBLed(red_pin=LED_RED_PIN, green_pin=LED_GREEN_PIN, blue_pin=LED_BLUE_PIN)
-ir       = InfraredSensor(signal_pin=IR_PIN, led=led)
-lcd      = LCDDisplay(i2c_address=LCD_ADDRESS)
-servo    = ServoLock(pin=SERVO_PIN)
-alarm    = AlarmSystem(buzzer_pin=BUZZER_PIN, servo=servo, led=led, ir_sensor=ir)
-button   = PushButton(pin=BUTTON_PIN, on_press=lambda: alarm.door_pressed(lcd))
-receiver = KeypadReceiver(port=SERIAL_PORT, lcd=lcd, alarm=alarm)
+rgb_led   = RGBLed(red_pin=LED_RED_PIN, green_pin=LED_GREEN_PIN, blue_pin=LED_BLUE_PIN)
+white_led = WhiteLed(pin=WHITE_LED_PIN)
+ir        = InfraredSensor(signal_pin=IR_PIN, led=white_led)
+lcd       = LCDDisplay(i2c_address=LCD_ADDRESS)
+servo     = ServoLock(pin=SERVO_PIN)
+alarm     = AlarmSystem(buzzer_pin=BUZZER_PIN, servo=servo, led=rgb_led)
+button    = PushButton(pin=BUTTON_PIN, on_press=lambda: alarm.door_pressed(lcd))
+receiver  = KeypadReceiver(port=SERIAL_PORT, lcd=lcd, alarm=alarm)
 
 ir.start()
 
@@ -51,5 +55,6 @@ finally:
     alarm.cleanup()
     button.cleanup()
     servo.cleanup()
-    led.cleanup()
+    rgb_led.cleanup()
+    white_led.cleanup()
     GPIO.cleanup()

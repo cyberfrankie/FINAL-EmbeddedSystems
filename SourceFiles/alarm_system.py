@@ -10,11 +10,10 @@ class AlarmSystem:
     MAX_ATTEMPTS = 3
     LED_FLASH_DURATION = 2.0
 
-    def __init__(self, buzzer_pin=23, servo=None, led=None, ir_sensor=None):
+    def __init__(self, buzzer_pin=23, servo=None, led=None):
         self._pin = buzzer_pin
         self._servo = servo
         self._led = led
-        self._ir_sensor = ir_sensor
         self._unlocked = False   # persistent armed/disarmed state
         self._alarm_active = False
         self._failed_attempts = 0
@@ -22,11 +21,9 @@ class AlarmSystem:
         GPIO.output(buzzer_pin, GPIO.LOW)
 
     def _flash_led(self, color):
-        """Show `color` on the RGB LED and pause the IR sensor for LED_FLASH_DURATION."""
+        """Show `color` on the RGB LED."""
         if self._led:
             getattr(self._led, color)()
-        if self._ir_sensor:
-            self._ir_sensor.override(self.LED_FLASH_DURATION)
 
     def failed_attempt(self, lcd):
         self._failed_attempts += 1

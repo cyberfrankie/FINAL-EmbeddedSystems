@@ -31,3 +31,20 @@ class RGBLed:
 
     def cleanup(self):
         self.off()
+
+
+class WhiteLed:
+
+    def __init__(self, pin):
+        self._pin = pin
+        GPIO.setup(pin, GPIO.OUT)
+        GPIO.output(pin, GPIO.LOW)
+
+    def on(self):
+        GPIO.output(self._pin, GPIO.HIGH)
+
+    def off(self):
+        GPIO.output(self._pin, GPIO.LOW)
+
+    def cleanup(self):
+        self.off()
