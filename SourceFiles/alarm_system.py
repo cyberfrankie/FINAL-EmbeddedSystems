@@ -53,6 +53,14 @@ class AlarmSystem:
         threading.Thread(target=self._panic_flash, daemon=True).start()
         print("PANIC triggered - system re-armed!")
 
+    def stop_panic(self, lcd):
+        self._panic_active = False
+        GPIO.output(self._pin, GPIO.LOW)
+        if self._led:
+            self._led.off()
+        lcd.show_armed()
+        print("Panic stopped.")
+
     def _panic_flash(self):
         while self._panic_active:
             GPIO.output(self._pin, GPIO.HIGH)

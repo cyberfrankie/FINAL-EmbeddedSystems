@@ -13,7 +13,10 @@ class PanicButton:
         GPIO.add_event_detect(pin, GPIO.RISING, callback=self._handle, bouncetime=300)
 
     def _handle(self, channel):
-        self._alarm.panic(self._lcd)
+        if self._alarm._panic_active:
+            self._alarm.stop_panic(self._lcd)
+        else:
+            self._alarm.panic(self._lcd)
 
     def cleanup(self):
         GPIO.remove_event_detect(self._pin)
