@@ -4,8 +4,7 @@ import sys
 import os
 import RPi.GPIO as GPIO
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'Part1_Doorlock_Alarm'))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'Part2_Motion_Sensor'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'SourceFiles'))
 
 from lcd_display import LCDDisplay
 from alarm_system import AlarmSystem
