@@ -21,9 +21,12 @@ class AlarmSystem:
         GPIO.output(buzzer_pin, GPIO.LOW)
 
     def _flash_led(self, color):
-        """Show `color` on the RGB LED."""
+        """Flash `color` on the RGB LED for LED_FLASH_DURATION seconds, then turn it off."""
         if self._led:
             getattr(self._led, color)()
+            t = threading.Timer(self.LED_FLASH_DURATION, self._led.off)
+            t.daemon = True
+            t.start()
 
     def failed_attempt(self, lcd):
         self._failed_attempts += 1
