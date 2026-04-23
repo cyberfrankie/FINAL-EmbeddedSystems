@@ -26,9 +26,9 @@ BUTTON_PIN   = 18               # BCM pin for push button (doorknob)
 SERVO_PIN    = 17               # BCM pin for servo signal wire
 
 # RGB LED pins (common-cathode: longest pin to GND)
-LED_RED_PIN   = 24
-LED_GREEN_PIN = 25
-LED_BLUE_PIN  = 8
+LED_RED_PIN   = 13
+LED_GREEN_PIN = 19
+LED_BLUE_PIN  = 26
 
 # HW-416 IR sensor digital output pin
 IR_PIN = 4
