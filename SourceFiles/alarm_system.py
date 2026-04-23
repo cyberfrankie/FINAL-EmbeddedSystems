@@ -1,5 +1,7 @@
 # controls the alarm system
 
+import time
+import threading
 import RPi.GPIO as GPIO
 
 
@@ -72,6 +74,15 @@ class AlarmSystem:
             self._alarm_active = True
             GPIO.output(self._pin, GPIO.HIGH)
             lcd.show_alarm()
+
+    def doorbell(self):
+        def _beep():
+            for _ in range(3):
+                GPIO.output(self._pin, GPIO.HIGH)
+                time.sleep(0.15)
+                GPIO.output(self._pin, GPIO.LOW)
+                time.sleep(0.15)
+        threading.Thread(target=_beep, daemon=True).start()
 
     def cleanup(self):
         self._alarm_active = False

@@ -62,6 +62,12 @@ class LCDDisplay:
         self.lcd.cursor_pos = (1, 0)
         self.lcd.write_string("Unauthorized!")
 
+    def show_doorbell(self):
+        self._input_length = 0
+        self.lcd.cursor_pos = (0, 0)
+        self.lcd.write_string("*Ding Dong!*    ")
+        self._reset_after(2)
+
     def clear_input(self):
         self._input_length = 0
         self.lcd.cursor_pos = (0, 0)

@@ -30,3 +30,7 @@ class KeypadReceiver:
                 elif line == "CLEARED":
                     print("Input cleared.")
                     self._lcd.clear_input()
+                elif line == "DOORBELL":
+                    print("Doorbell!")
+                    self._alarm.doorbell()
+                    self._lcd.show_doorbell()
