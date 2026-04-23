@@ -1,4 +1,5 @@
-# Control file for the RGB LED (common-cathode, 4-pin: R, GND, G, B)
+# Control file for the RGB LED (common-anode, 4-pin: R, VCC, G, B)
+# Common anode: longest pin to 3.3V. LOW = on, HIGH = off.
 
 import RPi.GPIO as GPIO
 
@@ -9,7 +10,7 @@ class RGBLed:
         self._pins = {'r': red_pin, 'g': green_pin, 'b': blue_pin}
         for pin in self._pins.values():
             GPIO.setup(pin, GPIO.OUT)
-            GPIO.output(pin, GPIO.LOW)
+            GPIO.output(pin, GPIO.HIGH)  # HIGH = off for common anode
 
     def white(self):
         self._set(True, True, True)
@@ -24,9 +25,9 @@ class RGBLed:
         self._set(False, False, False)
 
     def _set(self, r, g, b):
-        GPIO.output(self._pins['r'], GPIO.HIGH if r else GPIO.LOW)
-        GPIO.output(self._pins['g'], GPIO.HIGH if g else GPIO.LOW)
-        GPIO.output(self._pins['b'], GPIO.HIGH if b else GPIO.LOW)
+        GPIO.output(self._pins['r'], GPIO.LOW if r else GPIO.HIGH)
+        GPIO.output(self._pins['g'], GPIO.LOW if g else GPIO.HIGH)
+        GPIO.output(self._pins['b'], GPIO.LOW if b else GPIO.HIGH)
 
     def cleanup(self):
         self.off()
