@@ -31,7 +31,7 @@ LED_GREEN_PIN = 19
 LED_BLUE_PIN  = 26
 
 # HW-416 IR sensor digital output pin
-IR_PIN = 4
+IR_PIN = 16
 
 led      = RGBLed(red_pin=LED_RED_PIN, green_pin=LED_GREEN_PIN, blue_pin=LED_BLUE_PIN)
 ir       = InfraredSensor(signal_pin=IR_PIN, led=led)
