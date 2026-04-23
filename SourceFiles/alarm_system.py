@@ -16,6 +16,7 @@ class AlarmSystem:
         self._led = led
         self._unlocked = False   # persistent armed/disarmed state
         self._alarm_active = False
+        self._panic_active = False
         self._failed_attempts = 0
         GPIO.setup(buzzer_pin, GPIO.OUT)
         GPIO.output(buzzer_pin, GPIO.LOW)
@@ -41,8 +42,31 @@ class AlarmSystem:
         else:
             lcd.show_denied()
 
+    def panic(self, lcd):
+        self._panic_active = True
+        self._alarm_active = False
+        self._unlocked = False
+        self._failed_attempts = 0
+        if self._servo:
+            self._servo.lock()
+        lcd.show_panic()
+        threading.Thread(target=self._panic_flash, daemon=True).start()
+        print("PANIC triggered - system re-armed!")
+
+    def _panic_flash(self):
+        while self._panic_active:
+            GPIO.output(self._pin, GPIO.HIGH)
+            if self._led:
+                self._led.red()
+            time.sleep(0.2)
+            GPIO.output(self._pin, GPIO.LOW)
+            if self._led:
+                self._led.off()
+            time.sleep(0.2)
+
     def disarm(self, lcd):
         self._failed_attempts = 0
+        self._panic_active = False
         if self._alarm_active:
             self._alarm_active = False
             GPIO.output(self._pin, GPIO.LOW)
@@ -86,4 +110,5 @@ class AlarmSystem:
 
     def cleanup(self):
         self._alarm_active = False
+        self._panic_active = False
         GPIO.output(self._pin, GPIO.LOW)

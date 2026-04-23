@@ -13,6 +13,7 @@ from keypad_receiver import KeypadReceiver
 from servo_lock import ServoLock
 from led_control import RGBLed, WhiteLed
 from infrared_sensor import InfraredSensor
+from panic_button import PanicButton
 
 # GPIO mode set once here so all modules share the same context
 GPIO.setmode(GPIO.BCM)
@@ -35,6 +36,9 @@ WHITE_LED_PIN = 6
 # HW-416 IR sensor digital output pin
 IR_PIN = 16
 
+# Panic button pin
+PANIC_PIN = 20
+
 rgb_led   = RGBLed(red_pin=LED_RED_PIN, green_pin=LED_GREEN_PIN, blue_pin=LED_BLUE_PIN)
 white_led = WhiteLed(pin=WHITE_LED_PIN)
 ir        = InfraredSensor(signal_pin=IR_PIN, led=white_led)
@@ -42,6 +46,7 @@ lcd       = LCDDisplay(i2c_address=LCD_ADDRESS)
 servo     = ServoLock(pin=SERVO_PIN)
 alarm     = AlarmSystem(buzzer_pin=BUZZER_PIN, servo=servo, led=rgb_led)
 button    = PushButton(pin=BUTTON_PIN, on_press=lambda: alarm.door_pressed(lcd))
+panic     = PanicButton(pin=PANIC_PIN, alarm=alarm, lcd=lcd)
 receiver  = KeypadReceiver(port=SERIAL_PORT, lcd=lcd, alarm=alarm)
 
 ir.start()
@@ -54,6 +59,7 @@ finally:
     ir.cleanup()
     alarm.cleanup()
     button.cleanup()
+    panic.cleanup()
     servo.cleanup()
     rgb_led.cleanup()
     white_led.cleanup()

@@ -62,6 +62,13 @@ class LCDDisplay:
         self.lcd.cursor_pos = (1, 0)
         self.lcd.write_string("Unauthorized!")
 
+    def show_panic(self):
+        self.lcd.clear()
+        self.lcd.cursor_pos = (0, 0)
+        self.lcd.write_string("!! PANIC !!")
+        self.lcd.cursor_pos = (1, 0)
+        self.lcd.write_string("Help Needed!")
+
     def show_doorbell(self):
         self._input_length = 0
         self.lcd.cursor_pos = (0, 0)
