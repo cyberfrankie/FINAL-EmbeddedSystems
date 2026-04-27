@@ -69,6 +69,11 @@ class LCDDisplay:
         self.lcd.cursor_pos = (1, 0)
         self.lcd.write_string("Help Needed!")
 
+    def show_door_opened(self):
+        self.lcd.cursor_pos = (0, 0)
+        self.lcd.write_string("Door Opened!    ")
+        self._reset_after(2)
+
     def show_doorbell(self):
         self._input_length = 0
         self.lcd.cursor_pos = (0, 0)

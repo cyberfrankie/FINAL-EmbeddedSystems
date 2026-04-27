@@ -100,6 +100,7 @@ class AlarmSystem:
             lcd.reset()
             print("Alarm silenced.")
         elif self._unlocked:
+            lcd.show_door_opened()
             print("Door opened - system is unlocked.")
         else:
             print("Unauthorized door attempt - triggering alarm!")
