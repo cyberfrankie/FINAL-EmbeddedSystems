@@ -19,6 +19,10 @@ Keypad keypad = Keypad(makeKeymap(keys), rowPins, colPins, ROWS, COLS);
 const String CORRECT_CODE = "369B";
 String inputCode = "";
 
+void setup() {
+  Serial.begin(9600);
+}
+
 void loop() {
   char key = keypad.getKey();
   if (key) {
