@@ -61,6 +61,15 @@ class AlarmSystem:
         lcd.show_armed()
         print("Panic stopped.")
 
+    def _alarm_flash(self):
+        while self._alarm_active:
+            if self._led:
+                self._led.red()
+            time.sleep(0.2)
+            if self._led:
+                self._led.off()
+            time.sleep(0.2)
+
     def _panic_flash(self):
         while self._panic_active:
             GPIO.output(self._pin, GPIO.HIGH)
@@ -108,6 +117,7 @@ class AlarmSystem:
             self._alarm_active = True
             GPIO.output(self._pin, GPIO.HIGH)
             lcd.show_forced_entry()
+            threading.Thread(target=self._alarm_flash, daemon=True).start()
 
     def doorbell(self):
         def _beep():
