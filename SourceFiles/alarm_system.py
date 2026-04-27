@@ -87,6 +87,7 @@ class AlarmSystem:
 
     def rearm(self, lcd):
         self._unlocked = False
+        self._flash_led('red')
         if self._servo:
             self._servo.lock()
         lcd.show_armed()
@@ -106,7 +107,7 @@ class AlarmSystem:
             print("Unauthorized door attempt - triggering alarm!")
             self._alarm_active = True
             GPIO.output(self._pin, GPIO.HIGH)
-            lcd.show_alarm()
+            lcd.show_forced_entry()
 
     def doorbell(self):
         def _beep():

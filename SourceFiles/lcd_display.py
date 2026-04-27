@@ -2,6 +2,7 @@
 
 from RPLCD.i2c import CharLCD
 import threading
+import time
 
 
 class LCDDisplay:
@@ -18,6 +19,14 @@ class LCDDisplay:
         )
         self._input_length = 0
         self._status = "Armed"
+        self._show_boot()
+
+    def _show_boot(self):
+        self.lcd.cursor_pos = (0, 0)
+        self.lcd.write_string("Initializing... ")
+        self.lcd.cursor_pos = (1, 0)
+        self.lcd.write_string("Please wait...  ")
+        time.sleep(2)
         self.reset()
 
     def reset(self):
@@ -58,9 +67,16 @@ class LCDDisplay:
     def show_alarm(self):
         self.lcd.clear()
         self.lcd.cursor_pos = (0, 0)
-        self.lcd.write_string("!! ALARM !!")
+        self.lcd.write_string("!! ALARM !!     ")
         self.lcd.cursor_pos = (1, 0)
-        self.lcd.write_string("Unauthorized!")
+        self.lcd.write_string("Wrong Code!     ")
+
+    def show_forced_entry(self):
+        self.lcd.clear()
+        self.lcd.cursor_pos = (0, 0)
+        self.lcd.write_string("!! ALARM !!     ")
+        self.lcd.cursor_pos = (1, 0)
+        self.lcd.write_string("Forced Entry!   ")
 
     def show_panic(self):
         self.lcd.clear()
