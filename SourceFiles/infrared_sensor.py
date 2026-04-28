@@ -28,7 +28,7 @@ class InfraredSensor:
 
     def _loop(self):
         while self._running:
-            detected = GPIO.input(self._pin) == GPIO.LOW
+            detected = GPIO.input(self._pin) == GPIO.HIGH
 
             if detected and not self._motion_active:
                 self._motion_active = True
